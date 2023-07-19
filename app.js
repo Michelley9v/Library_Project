@@ -27,30 +27,30 @@ class Library{
         this.bookcount = books.lenght;
         this.books = books;
     }
-addBook() {
-    console.log("AddBook");
+addBook(book) {
+ if book {
     // Select the Inputs from the form -- title, author, and read
-    const title = document.getElementById("title");
-    const author = document.getElementById("author");
-    const read = document.getElementById("read");
+    //const title = document.getElementById("title");
+    //const author = document.getElementById("author");
+    //const read = document.getElementById("read");
     //Increment book count property
-    this.nextId++;
+   // this.nextId++;
     // Create an instance from my Book class with the input values
-    const newBook = new Book
-    (this.nextId, 
-    title.value, 
-    author.value, 
-    read.checked);
+   // const newBook = new Book
+   // (this.nextId, 
+   // title.value, 
+  //  author.value, 
+    //read.checked);
     
     //Push this new book instance into the books array
-    this.books.push(newBook);
+   // this.books.push(newBook);
     // Select the table body
     const tbody = document.getElementById("tableBody")
     // Create new table row
     const newTr = document.createElement("tr")
     newTr.classList.add(newBook.id);
     newTr.addEventListener("dbclick", () => {
-     this.removeBook(newBook.id);
+     this.removeBook(book.id|| newbook.id);
 
     });
     //Create three new table data cells
@@ -61,12 +61,12 @@ addBook() {
     newTitle.textContent = title.value;
     newAuthor.textContent = author.value;
     const newCheckbox = document.createElement("input")
-    newCheckbox.classList.add(newBook.id); 
+    newCheckbox.classList.add(book.id ||newBook1r ); 
     newCheckbox.type = "checkbox";
     newCheckbox.checked = read.checked;
     newCheckbox.disabled = read.checked;
     newCheckbox.addEventListener("click",(event)=>{
-       this.markRead(event.target, newBook.id);
+       this.markRead(event.target, book.id || newBook.id);
     });
     newRead.appendChild(newCheckbox);
     //Append the td's to the tr
@@ -96,10 +96,14 @@ this.books.forEach((book) => {
 }
 
 const library = new Library(books);
-
+if(books.lenght>0) {
+library.books.forEach((book) =>{
+    library.addBook(book);
+});
 const form = document.getElementById("form");
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     library.addBook();
 });
+} 
