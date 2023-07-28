@@ -24,33 +24,36 @@ class Book {
 
 class Library{
     contractor(books){
-        this.bookcount = books.lenght;
+        this.nextId = books.lenght;
         this.books = books;
     }
 addBook(book) {
- if book {
+if (!book) {
+    console.log("creating new book")
     // Select the Inputs from the form -- title, author, and read
-    //const title = document.getElementById("title");
-    //const author = document.getElementById("author");
-    //const read = document.getElementById("read");
+    var title = document.getElementById("title");
+    var author = document.getElementById("author");
+    var read = document.getElementById("read");
     //Increment book count property
-   // this.nextId++;
+    this.nextId++;
     // Create an instance from my Book class with the input values
-   // const newBook = new Book
-   // (this.nextId, 
-   // title.value, 
-  //  author.value, 
-    //read.checked);
+   newBook = new Book (
+   this.nextId, 
+   title.value, 
+   author.value, 
+   read.checked);
     
     //Push this new book instance into the books array
-   // this.books.push(newBook);
+   this.books.push(newBook);
+   
     // Select the table body
     const tbody = document.getElementById("tableBody")
     // Create new table row
     const newTr = document.createElement("tr")
-    newTr.classList.add(newBook.id);
+    newTr.classList.add(book ? book.id : newBook.id);
+    console.log("made it this far");
     newTr.addEventListener("dbclick", () => {
-     this.removeBook(book.id|| newbook.id);
+     this.removeBook(book ? book.id : newBook.id);
 
     });
     //Create three new table data cells
@@ -58,15 +61,15 @@ addBook(book) {
     const newAuthor = document.createElement("td")
     const newRead = document.createElement("td")
     // Add text content to td's with book values
-    newTitle.textContent = title.value;
-    newAuthor.textContent = author.value;
-    const newCheckbox = document.createElement("input")
-    newCheckbox.classList.add(book.id ||newBook1r ); 
+    newTitle.textContent = book ? book.title : newBook.title;
+    newAuthor.textContent = book ? book.author : newBook.author;
+    const newCheckbox = document.createElement("input");
+    newCheckbox.classList.add(book ? book.id : newBook.id ); 
     newCheckbox.type = "checkbox";
-    newCheckbox.checked = read.checked;
-    newCheckbox.disabled = read.checked;
+    newCheckbox.checked = book ? book.read : read.checked;
+    newCheckbox.disabled = book ? book.read : read.checked;
     newCheckbox.addEventListener("click",(event)=>{
-       this.markRead(event.target, book.id || newBook.id);
+       this.markRead(event.target, book ? book.id : newBook.id);
     });
     newRead.appendChild(newCheckbox);
     //Append the td's to the tr
@@ -77,7 +80,7 @@ addBook(book) {
     tbody.appendChild(newTr);
 }
 
-markRead(checkbox, id) {
+markRead (checkbox, id); {
 this.books.forEach((book) => {
   if (id === book.id) {
     book.read = true;
@@ -86,24 +89,25 @@ this.books.forEach((book) => {
   });
  }
 
- removeBook(bookId){
+ removeBook(bookId); {
     //Reassign the books array filtering out thr remove book
     this.books = this.books.filter(({id}) => bookId !== id);
     // Remove the book from the DOM 
     const tbody = document.getElementById("tableBody");
-    tbody.removeChild(document.getElementById(bookId));
+    tbody.removeChild(document.getElementById(bookId)[0]);
  }
 }
+}
 
-const library = new Library(books);
-if(books.lenght>0) {
-library.books.forEach((book) =>{
+let library = new Library(books);
+if(books.lenght > 0){
+library.books.forEach((book) => {
     library.addBook(book);
 });
+}
 const form = document.getElementById("form");
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     library.addBook();
 });
-} 
