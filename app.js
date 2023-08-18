@@ -14,62 +14,69 @@ const books = [
 ];
 
 class Book {
-    contructor(id, title, author, read){
+    constructor(id, title, author, read){
         this.id = id;
         this.title = title;
         this.author = author;
-        this.read = read
+        this.read = read;
+        this.favorite = false;
     }
 }
 
 class Library{
-    contractor(books){
+    constractor(books){
         this.nextId = books.lenght;
         this.books = books;
     }
 addBook(book) {
+    if (book) {
+   var {id, title, author, read} = book;
+}
 if (!book) {
-    console.log("creating new book")
+    console.log("creating new book ...")
     // Select the Inputs from the form -- title, author, and read
-    var title = document.getElementById("title");
-    var author = document.getElementById("author");
-    var read = document.getElementById("read");
+    var titleInput= document.getElementById("title");
+    var authorInput = document.getElementById("author");
+    var readInput = document.getElementById("read");
     //Increment book count property
     this.nextId++;
+    console.log(id, title, author, read)
     // Create an instance from my Book class with the input values
-   newBook = new Book (
+  var newBook = new Book (
    this.nextId, 
-   title.value, 
-   author.value, 
-   read.checked);
-    
+   titleInput.value, 
+   authorInput.value, 
+   readInput.checked);
+  
     //Push this new book instance into the books array
    this.books.push(newBook);
-   
+  }
     // Select the table body
     const tbody = document.getElementById("tableBody")
     // Create new table row
     const newTr = document.createElement("tr")
-    newTr.classList.add(book ? book.id : newBook.id);
+    newTr.classList.add(id || newBook.id);
     console.log("made it this far");
     newTr.addEventListener("dbclick", () => {
-     this.removeBook(book ? book.id : newBook.id);
-
+     this.removeBook(id || newBook.id);
+    });
+    newTr.addEventListener("click", () => {
+        this.markFavorite(id || newBook.id);
     });
     //Create three new table data cells
     const newTitle = document.createElement("td")
     const newAuthor = document.createElement("td")
     const newRead = document.createElement("td")
     // Add text content to td's with book values
-    newTitle.textContent = book ? book.title : newBook.title;
-    newAuthor.textContent = book ? book.author : newBook.author;
+    newTitle.textContent = title || newBook.title;
+    newAuthor.textContent = author || newBook.author;
     const newCheckbox = document.createElement("input");
-    newCheckbox.classList.add(book ? book.id : newBook.id ); 
+    newCheckbox.classList.add(id || newBook.id ); 
     newCheckbox.type = "checkbox";
-    newCheckbox.checked = book ? book.read : read.checked;
-    newCheckbox.disabled = book ? book.read : read.checked;
+    newCheckbox.checked = read || readInput.checked;
+    newCheckbox.disabled = read || readInput.checked;
     newCheckbox.addEventListener("click",(event)=>{
-       this.markRead(event.target, book ? book.id : newBook.id);
+       this.markRead(event.target,id || newBook.id);
     });
     newRead.appendChild(newCheckbox);
     //Append the td's to the tr
@@ -80,7 +87,7 @@ if (!book) {
     tbody.appendChild(newTr);
 }
 
-markRead (checkbox, id); {
+markRead (checkbox, id) {
 this.books.forEach((book) => {
   if (id === book.id) {
     book.read = true;
@@ -89,14 +96,21 @@ this.books.forEach((book) => {
   });
  }
 
- removeBook(bookId); {
+ markFavorite(bookId) {
+this.books.foreach((book) => {
+    if (book.id === bookId) {
+    book.favorite = !book.favorite;
+}
+ });
+ document.getElementById(bookId)[0].classList.toggle("favorite");
+ }
+ removeBook(bookId) {
     //Reassign the books array filtering out thr remove book
     this.books = this.books.filter(({id}) => bookId !== id);
     // Remove the book from the DOM 
     const tbody = document.getElementById("tableBody");
     tbody.removeChild(document.getElementById(bookId)[0]);
  }
-}
 }
 
 let library = new Library(books);
